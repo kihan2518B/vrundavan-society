@@ -2,26 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Inter';
+  src: url('/assets/fonts/Inter/inter.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/assets/fonts/IBM_Plex_Sans/IBM_Plex_Sans.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Italic';
+  src: url('/assets/fonts/Inter/inter_italic.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Italic';
+  src: url('/assets/fonts/IBM_Plex_Sans/IBM_Plex_Sans_italic.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: Inter, sans-serif;
+  }
+
+  p {
+    font-family: "IBM Plex Sans", sans-serif;
+  }
+}
+/* ================================
+   Design Tokens – Dark Only
+   ================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core colors */
+  --color-bg: #000000;        /* near-black for better readability */
+  --color-fg: #ffffff;
+  --color-primary: #70ffef;
+
+  /* Derived colors */
+  --color-muted: rgba(255, 255, 255, 0.6);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-surface: #111111;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ================================
+   Base resets
+   ================================ */
+* {
+  border-color: var(--color-border);
 }
 
+html,
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* ================================
+   Typography defaults
+   ================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+p {
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+/* ================================
+   Selection
+   ================================ */
+::selection {
+  background-color: var(--color-primary);
+  color: #000000;
+}
+
+/* ================================
+   Scrollbar (optional but branded)
+   ================================ */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
 }

@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "prepare": "husky || true",
     "lint": "next lint",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
@@ -15,7 +16,18 @@
     "react": "^18",
     "react-dom": "^18"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
     "@next/eslint-plugin-next": "^16.1.1",
     "@types/node": "^20",
     "@types/react": "^18",
@@ -23,6 +35,8 @@
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.1",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "postcss": "^8",
     "prettier": "^3.7.4",
     "tailwindcss": "^3.4.1",

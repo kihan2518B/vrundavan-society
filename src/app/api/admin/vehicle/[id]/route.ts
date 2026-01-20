@@ -4,7 +4,8 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/index';
 import { normalizeVehicleNumber } from '@/lib/normalize';
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, context: { params: { id: string } }) {
+  const params = await context.params;
   const id = Number(params.id);
 
   if (Number.isNaN(id)) {

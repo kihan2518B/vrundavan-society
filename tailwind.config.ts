@@ -16,20 +16,35 @@ const config: Config = {
         border: '#ffffff1f',
         surface: '#111111',
 
-        /* App base */
-        appBg: '#f8fafc', // slate-50
-        appSurface: '#ffffff', // pure white
-        appText: '#0f172a', // slate-900
-        appMuted: '#475569', // slate-600
-        appBorder: '#e2e8f0', // slate-200
+        /* App Theme - Calm & Trustworthy */
+        appBg: '#f0f4f8', // Soft blue-gray background (calming)
+        appSurface: '#ffffff', // Pure white cards/surfaces
+        appText: '#1e293b', // Dark slate text (readable)
+        appMuted: '#64748b', // Medium slate for secondary text
+        appBorder: '#cbd5e1', // Light slate borders
 
-        /* Status */
-        success: '#16a34a',
-        danger: '#dc2626',
-        warning: '#d97706',
+        /* Action Colors */
+        appPrimary: '#2563eb', // Professional blue (trust & action)
+        appPrimaryHover: '#1d4ed8', // Darker blue for hover
+        appPrimaryLight: '#dbeafe', // Light blue for subtle highlights
+
+        /* Status Colors */
+        success: '#059669', // Green for success states
+        successLight: '#d1fae5', // Light green background
+        danger: '#dc2626', // Red for errors/warnings
+        dangerLight: '#fee2e2', // Light red background
+        warning: '#f59e0b', // Amber for warnings
+        warningLight: '#fef3c7', // Light amber background
+
+        /* Agency Branding */
+        apaxhub: '#70ffef', // Your signature teal/cyan
+        apaxhubDark: '#0ea5e9', // Darker variant for links
       },
       boxShadow: {
         glow: '0 0 20px rgba(112, 255, 239, 0.35)',
+        card: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+        cardHover: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+        button: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],

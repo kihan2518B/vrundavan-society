@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
   }
 
   const vehicleNumber = normalizeVehicleNumber(rawNumber);
+  console.log('vehicleNumber: ', vehicleNumber);
 
   const result = await db
     .select({
@@ -25,6 +26,7 @@ export async function GET(req: NextRequest) {
     .from(vehical)
     .where(and(eq(vehical.vehicleNumber, vehicleNumber), eq(vehical.isDeleted, false)))
     .limit(1);
+  console.log('result:', result);
 
   if (result.length === 0) {
     return NextResponse.json({ found: false }, { status: 404 });

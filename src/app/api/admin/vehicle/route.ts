@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { vehical } from '@/db/schema/vehical';
 import { normalizeVehicleNumber } from '@/lib/normalize';
 import { db } from '@/index';
-import { eq, asc } from 'drizzle-orm';
+import { eq, and, lt, desc } from 'drizzle-orm';
 
 export async function POST(req: Request) {
   const { vehicleNumber, ownerName, flatNumber, contactNumber } = await req.json();
@@ -27,9 +27,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Vehicle already exists' }, { status: 500 });
   }
 }
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const limit = Number(searchParams.get('limit') ?? 20);
+  const cursor = searchParams.get('cursor');
 
-export async function GET() {
-  const data = await db
+  const rows = await db
     .select({
       id: vehical.id,
       vehicleNumber: vehical.vehicleNumber,
@@ -39,8 +42,20 @@ export async function GET() {
       createdAt: vehical.createdAt,
     })
     .from(vehical)
-    .where(eq(vehical.isDeleted, false))
-    .orderBy(asc(vehical.flatNumber));
+    .where(
+      and(
+        eq(vehical.isDeleted, false),
+        cursor ? lt(vehical.createdAt, new Date(cursor)) : undefined
+      )
+    )
+    .orderBy(desc(vehical.createdAt))
+    .limit(limit + 1);
 
-  return NextResponse.json({ data });
+  const hasMore = rows.length > limit;
+  const data = hasMore ? rows.slice(0, limit) : rows;
+
+  return NextResponse.json({
+    data,
+    nextCursor: hasMore ? data[data.length - 1].createdAt : null,
+  });
 }

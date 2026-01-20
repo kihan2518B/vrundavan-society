@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import PDFDocument from 'pdfkit';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { eq, asc } from 'drizzle-orm';
 import { db } from '@/index';
 import { vehical } from '@/db/schema/vehical';
@@ -16,54 +16,60 @@ export async function GET() {
     .where(eq(vehical.isDeleted, false))
     .orderBy(asc(vehical.flatNumber));
 
-  const doc = new PDFDocument({ size: 'A4', margin: 40 });
+  const pdfDoc = await PDFDocument.create();
 
-  const chunks: Buffer[] = [];
-  doc.on('data', (chunk) => chunks.push(chunk));
-  doc.on('end', () => {});
+  // Use built-in font (SAFE, no filesystem access)
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-  doc.fontSize(16).text('Vehicle Records', { align: 'center' });
-  doc.moveDown();
+  let page = pdfDoc.addPage([595, 842]); // A4
+  const { width, height } = page.getSize();
 
-  doc.fontSize(10);
+  let y = height - 40;
 
-  const tableTop = doc.y;
-  const colX = {
-    vehicle: 40,
-    owner: 130,
-    flat: 260,
-    contact: 320,
+  const drawText = (text: string, x: number, size = 10) => {
+    page.drawText(text, {
+      x,
+      y,
+      size,
+      font,
+      color: rgb(0, 0, 0),
+    });
   };
 
-  doc.text('Vehicle', colX.vehicle, tableTop);
-  doc.text('Owner', colX.owner, tableTop);
-  doc.text('Flat', colX.flat, tableTop);
-  doc.text('Contact', colX.contact, tableTop);
-
-  doc.moveDown(0.5);
-  doc.moveTo(40, doc.y).lineTo(550, doc.y).stroke();
-
-  let y = doc.y + 5;
-
-  rows.forEach((v) => {
-    if (y > 750) {
-      doc.addPage();
-      y = 40;
-    }
-
-    doc.text(v.vehicleNumber, colX.vehicle, y);
-    doc.text(v.ownerName, colX.owner, y);
-    doc.text(v.flatNumber, colX.flat, y);
-    doc.text(v.contactNumber, colX.contact, y);
-
-    y += 18;
+  // Title
+  page.drawText('Vehicle Records', {
+    x: width / 2 - 60,
+    y,
+    size: 16,
+    font,
   });
 
-  doc.end();
+  y -= 30;
 
-  const pdfBuffer = Buffer.concat(chunks);
+  // Headers
+  drawText('Vehicle', 40);
+  drawText('Owner', 160);
+  drawText('Flat', 320);
+  drawText('Contact', 380);
 
-  return new NextResponse(pdfBuffer, {
+  y -= 15;
+
+  for (const v of rows) {
+    if (y < 40) {
+      page = pdfDoc.addPage([595, 842]);
+      y = height - 40;
+    }
+
+    drawText(v.vehicleNumber, 40);
+    drawText(v.ownerName, 160);
+    drawText(v.flatNumber, 320);
+    drawText(v.contactNumber, 380);
+
+    y -= 15;
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  return new NextResponse(Buffer.from(pdfBytes), {
     headers: {
       'Content-Type': 'application/pdf',
       'Content-Disposition': 'attachment; filename="vehicles.pdf"',

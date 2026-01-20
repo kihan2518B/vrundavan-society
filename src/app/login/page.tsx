@@ -102,6 +102,8 @@ export default function Page() {
       console.error(err);
       setError('Connection error. Please check your internet and try again.');
       setLoading(false);
+    } finally {
+      setLoading(false);
     }
   }
 

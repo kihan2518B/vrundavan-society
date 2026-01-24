@@ -1,5 +1,6 @@
 'use client';
 
+import { Building2, Phone, Shield, HardHat } from 'lucide-react';
 import { useState } from 'react';
 
 type ApartmentFormProps = {
@@ -112,28 +113,35 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Success Message */}
       {success && (
-        <div className="bg-successLight border border-success rounded-lg p-3 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
-          <svg
-            className="w-5 h-5 text-success flex-shrink-0 mt-0.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+        <div className="bg-successLight border-l-4 border-success rounded-lg p-4 flex items-start gap-3">
+          <div className="w-6 h-6 rounded-full bg-success flex items-center justify-center flex-shrink-0">
+            <svg
+              className="w-4 h-4 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
           <div>
-            <p className="text-sm font-medium text-appText">
+            <p className="text-sm font-bold text-appText">
               {mode === 'create'
-                ? 'Apartment added successfully!'
-                : 'Apartment updated successfully!'}
+                ? 'Apartment Added Successfully!'
+                : 'Apartment Updated Successfully!'}
+            </p>
+            <p className="text-xs text-appMuted mt-0.5">
+              {mode === 'create'
+                ? 'The apartment has been registered in the system'
+                : 'Changes have been saved'}
             </p>
           </div>
         </div>
@@ -141,26 +149,17 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
 
       {/* Error Message */}
       {error && (
-        <div className="bg-dangerLight border border-danger rounded-lg p-3 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
-          <svg
-            className="w-5 h-5 text-danger flex-shrink-0 mt-0.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+        <div className="bg-dangerLight border-l-4 border-danger rounded-lg p-4 flex items-start gap-3">
+          <div className="w-6 h-6 rounded-full bg-danger flex items-center justify-center flex-shrink-0">
+            <span className="text-white text-sm font-bold">!</span>
+          </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-appText">{error}</p>
+            <p className="text-sm font-bold text-appText">Error</p>
+            <p className="text-xs text-appMuted mt-0.5">{error}</p>
           </div>
           <button
             onClick={() => setError(null)}
-            className="flex-shrink-0 text-danger hover:text-danger/80"
+            className="flex-shrink-0 text-danger hover:text-danger/70 transition"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -178,73 +177,66 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
       <div className="space-y-4">
         {/* Apartment Name */}
         <div>
-          <label htmlFor="apartmentName" className="block text-sm font-medium text-appText mb-1.5">
+          <label htmlFor="apartmentName" className="block text-sm font-semibold text-appText mb-2">
             Apartment Name <span className="text-danger">*</span>
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-appMuted"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                />
-              </svg>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+              <Building2 className="w-5 h-5 text-appMuted" />
             </div>
             <input
               id="apartmentName"
               type="text"
-              placeholder="e.g., ANJANISUT APARTMENT"
+              placeholder="Sunshine Residency"
               value={apartmentName}
               onChange={(e) => setApartmentName(e.target.value)}
               className="
-                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
-                text-appText bg-white
+                w-full border-2 border-appBorder rounded-xl pl-11 pr-4 py-3.5
+                text-appText font-medium bg-white
                 focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
+                placeholder:text-appMuted/50 placeholder:font-normal
                 transition-all
               "
               disabled={loading}
             />
           </div>
+          <p className="text-xs text-appMuted mt-1.5 ml-1">
+            Enter the full name of the apartment/society
+          </p>
         </div>
 
-        {/* Owner Name */}
+        {/* Divider */}
+        <div className="relative py-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-appBorder"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="px-3 bg-appSurface text-xs font-semibold text-appMuted uppercase tracking-wider">
+              Pramukh Details
+            </span>
+          </div>
+        </div>
+
+        {/* Pramukh Name */}
         <div>
-          <label htmlFor="pramukhName" className="block text-sm font-medium text-appText mb-1.5">
-            pramukhName <span className="text-danger">*</span>
+          <label htmlFor="pramukhName" className="block text-sm font-semibold text-appText mb-2">
+            Pramukh Name <span className="text-danger">*</span>
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-appMuted"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+              <Shield className="w-5 h-5 text-appMuted" />
             </div>
             <input
               id="pramukhName"
               type="text"
-              placeholder="Enter owner's full name"
+              placeholder="Enter Pramukh's full name"
               value={pramukhName}
               onChange={(e) => setPramukhName(e.target.value)}
               className="
-                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
-                text-appText bg-white
+                w-full border-2 border-appBorder rounded-xl pl-11 pr-4 py-3.5
+                text-appText font-medium bg-white
                 focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
+                placeholder:text-appMuted/50 placeholder:font-normal
                 transition-all
               "
               disabled={loading}
@@ -254,62 +246,53 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
 
         {/* Pramukh Mobile */}
         <div>
-          <label htmlFor="pramukhMobile" className="block text-sm font-medium text-appText mb-1.5">
+          <label htmlFor="pramukhMobile" className="block text-sm font-semibold text-appText mb-2">
             Pramukh Mobile <span className="text-danger">*</span>
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-appMuted"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+              <Phone className="w-5 h-5 text-appMuted" />
             </div>
             <input
               id="pramukhMobile"
               type="tel"
-              placeholder="Enter Pramukh's mobile number"
+              placeholder="9876543210"
               value={pramukhMobile}
-              onChange={(e) => setPramukhMobile(e.target.value)}
+              onChange={(e) => setPramukhMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
               className="
-                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
-                text-appText bg-white
+                w-full border-2 border-appBorder rounded-xl pl-11 pr-4 py-3.5
+                text-appText font-medium bg-white
                 focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
+                placeholder:text-appMuted/50 placeholder:font-normal
                 transition-all
               "
               disabled={loading}
+              maxLength={10}
             />
+          </div>
+          <p className="text-xs text-appMuted mt-1.5 ml-1">10-digit mobile number without +91</p>
+        </div>
+
+        {/* Divider */}
+        <div className="relative py-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-appBorder"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="px-3 bg-appSurface text-xs font-semibold text-appMuted uppercase tracking-wider">
+              Bahadur Details
+            </span>
           </div>
         </div>
 
         {/* Bahadur Name */}
         <div>
-          <label htmlFor="bahadurName" className="block text-sm font-medium text-appText mb-1.5">
+          <label htmlFor="bahadurName" className="block text-sm font-semibold text-appText mb-2">
             Bahadur Name <span className="text-danger">*</span>
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-appMuted"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                />
-              </svg>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+              <HardHat className="w-5 h-5 text-appMuted" />
             </div>
             <input
               id="bahadurName"
@@ -318,9 +301,10 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
               value={bahadurName}
               onChange={(e) => setBahadurName(e.target.value)}
               className="
-                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
-                text-appText bg-white
+                w-full border-2 border-appBorder rounded-xl pl-11 pr-4 py-3.5
+                text-appText font-medium bg-white
                 focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
+                placeholder:text-appMuted/50 placeholder:font-normal
                 transition-all
               "
               disabled={loading}
@@ -330,53 +314,44 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
 
         {/* Bahadur Mobile */}
         <div>
-          <label htmlFor="bahadurMobile" className="block text-sm font-medium text-appText mb-1.5">
+          <label htmlFor="bahadurMobile" className="block text-sm font-semibold text-appText mb-2">
             Bahadur Mobile <span className="text-danger">*</span>
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-appMuted"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                />
-              </svg>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+              <Phone className="w-5 h-5 text-appMuted" />
             </div>
             <input
               id="bahadurMobile"
               type="tel"
-              placeholder="Enter Bahadur's mobile number"
+              placeholder="9876543210"
               value={bahadurMobile}
-              onChange={(e) => setBahadurMobile(e.target.value)}
+              onChange={(e) => setBahadurMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
               className="
-                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
-                text-appText bg-white
+                w-full border-2 border-appBorder rounded-xl pl-11 pr-4 py-3.5
+                text-appText font-medium bg-white
                 focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
+                placeholder:text-appMuted/50 placeholder:font-normal
                 transition-all
               "
               disabled={loading}
+              maxLength={10}
             />
           </div>
+          <p className="text-xs text-appMuted mt-1.5 ml-1">10-digit mobile number without +91</p>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 pt-2">
+      <div className="flex gap-3 pt-3">
         <button
           onClick={onCancel}
           disabled={loading}
           className="
-            flex-1 rounded-lg border-2 border-appBorder
+            flex-1 rounded-xl border-2 border-appBorder
             bg-white text-appText
-            py-3 font-semibold text-sm
-            hover:bg-appBg
+            py-3.5 font-bold text-sm
+            hover:bg-appBg hover:border-appMuted
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-all
           "
@@ -388,9 +363,9 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
           onClick={handleSubmit}
           disabled={loading}
           className="
-            flex-1 rounded-lg bg-appPrimary text-white
-            py-3 font-semibold text-sm
-            hover:bg-appPrimaryHover active:scale-98
+            flex-1 rounded-xl bg-gradient-to-r from-appPrimary to-apaxhubDark text-white
+            py-3.5 font-bold text-sm
+            hover:shadow-cardHover active:scale-[0.98]
             disabled:opacity-50 disabled:cursor-not-allowed
             shadow-button transition-all
             flex items-center justify-center gap-2
@@ -416,33 +391,7 @@ function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentForm
               Saving...
             </>
           ) : (
-            <>
-              {mode === 'create' ? (
-                <>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                  Add Apartment
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Update Apartment
-                </>
-              )}
-            </>
+            <>{mode === 'create' ? 'Add Apartment' : 'Update Apartment'}</>
           )}
         </button>
       </div>
@@ -475,57 +424,68 @@ export default function ApartmentFormSheet({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity"
         onClick={onClose}
       />
 
       {/* Bottom Sheet */}
-      <div className="fixed inset-x-0 bottom-0 z-50 animate-in slide-in-from-bottom duration-300">
-        <div className="bg-appSurface rounded-t-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-x-0 bottom-0 z-50">
+        <div className="bg-appSurface rounded-t-3xl shadow-2xl max-h-[92vh] overflow-y-auto">
           {/* Handle Bar */}
-          <div className="flex justify-center pt-3 pb-2">
+          <div className="flex justify-center pt-4 pb-2">
             <div className="w-12 h-1.5 bg-appBorder rounded-full" />
           </div>
 
           {/* Header */}
-          <div className="px-4 pb-4 border-b border-appBorder flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-appText">
-                {initialData ? 'Edit Vehicle' : 'Add New Vehicle'}
-              </h2>
-              <p className="text-xs text-appMuted mt-0.5">
-                {initialData
-                  ? 'Update vehicle information'
-                  : 'Register a new vehicle in the system'}
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-lg bg-appBg hover:bg-appBorder transition-colors flex items-center justify-center"
-              aria-label="Close"
-            >
-              <svg
-                className="w-5 h-5 text-appText"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          <div className="px-5 pb-5 border-b border-appBorder">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center ${initialData ? 'bg-appPrimaryLight' : 'bg-successLight'}`}
+                >
+                  <Building2
+                    className={`w-6 h-6 ${initialData ? 'text-appPrimary' : 'text-success'}`}
+                  />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-appText">
+                    {initialData ? 'Edit Apartment' : 'Add New Apartment'}
+                  </h2>
+                  <p className="text-xs text-appMuted mt-0.5">
+                    {initialData
+                      ? 'Update apartment information'
+                      : 'Register a new apartment in the system'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={onClose}
+                className="w-9 h-9 rounded-lg bg-appBg hover:bg-appBorder transition-colors flex items-center justify-center flex-shrink-0 ml-2"
+                aria-label="Close"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+                <svg
+                  className="w-5 h-5 text-appText"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Form Content */}
-          <div className="p-4">
+          <div className="p-5">
             <ApartmentForm
               key={initialData?.id ?? 'create'}
               mode={initialData ? 'edit' : 'create'}
-              initialData={null}
+              initialData={initialData}
               onSuccess={onSuccess}
               onCancel={onClose}
             />

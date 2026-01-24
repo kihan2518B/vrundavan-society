@@ -174,7 +174,6 @@ export default function HomePage() {
               {loading ? 'Searching...' : 'Search Vehicle Owner'}
             </button>
           </div>
-
           {/* Error State */}
           {error && (
             <div className="rounded-xl bg-dangerLight border-l-4 border-danger p-4 shadow-card">
@@ -209,11 +208,11 @@ export default function HomePage() {
 
                 <div className="space-y-1 mb-4 bg-white/10 rounded-lg p-3">
                   <p className="text-sm opacity-90">
-                    <span className="font-semibold font-mono text-base">
+                    <span className="font-semibold font-mono text-base text-white">
                       {result.vehicleNumber}
                     </span>
                   </p>
-                  <p className="text-sm opacity-90">
+                  <p className="text-sm text-white">
                     Block {result.blockNumber} • Floor {result.floor}
                   </p>
                 </div>
@@ -257,7 +256,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <p className="font-semibold text-appText text-sm">Pramukh</p>
-                      <p className="text-xs text-appMuted">{result.pramukhName}</p>
+                      <p className="text-sm text-appMuted">{result.pramukhName}</p>
                     </div>
                   </div>
                   <a
@@ -275,7 +274,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <p className="font-semibold text-appText text-sm">Bahadur</p>
-                      <p className="text-xs text-appMuted">{result.bahadurName}</p>
+                      <p className="text-sm text-appMuted">{result.bahadurName}</p>
                     </div>
                   </div>
                   <a

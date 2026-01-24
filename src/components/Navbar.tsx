@@ -1,6 +1,7 @@
 'use client';
 import { Info, Menu, Settings, X } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Navbar() {
@@ -41,22 +42,22 @@ export default function Navbar() {
         {isOpen && (
           <div className="bg-appSurface border-t border-appBorder shadow-cardHover">
             <nav className="max-w-md mx-auto px-4 py-3 space-y-1">
-              <a
+              <Link
                 href="/admin"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-appPrimaryLight text-appText hover:text-appPrimary transition group"
                 onClick={() => setIsOpen(false)}
               >
                 <Settings size={18} className="text-appMuted group-hover:text-appPrimary" />
                 <span className="font-medium text-sm">Admin Panel</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/about"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-appPrimaryLight text-appText hover:text-appPrimary transition group"
                 onClick={() => setIsOpen(false)}
               >
                 <Info size={18} className="text-appMuted group-hover:text-appPrimary" />
                 <span className="font-medium text-sm">About Us</span>
-              </a>
+              </Link>
             </nav>
           </div>
         )}

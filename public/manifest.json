@@ -1,11 +1,11 @@
 {
-  "name": "Vrundavan society",
+  "name": "Vrundavan Park",
   "short_name": "Vrundavan",
   "description": "Find vehicle owners in your society",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#fff",
+  "theme_color": "#fff",
   "orientation": "portrait",
   "icons": [
     {

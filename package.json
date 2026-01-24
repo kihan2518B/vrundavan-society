@@ -28,10 +28,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix --cache --max-warnings 0",
+      "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,md,yml}": [
+    "*.{md,yml}": [
       "prettier --write"
     ]
   },

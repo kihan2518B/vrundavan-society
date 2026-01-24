@@ -1,1 +1,2 @@
-npx lint-staged
+#!/bin/sh
+NODE_OPTIONS="--max-old-space-size=2048" npx lint-staged

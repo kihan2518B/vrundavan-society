@@ -1,5 +1,6 @@
 'use client';
 
+import { useDebounce } from '@/hooks/useDebounce';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -145,8 +146,11 @@ export default function HomePage() {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Vehicle | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [online, setOnline] = useState(true);
+
+  const debouncedValue = useDebounce(value, 500);
 
   useEffect(() => {
     setOnline(navigator.onLine);
@@ -165,6 +169,36 @@ export default function HomePage() {
   function normalize(input: string) {
     return input.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
   }
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!debouncedValue) {
+        setSuggestions([]);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      setSuggestions([]);
+
+      try {
+        const res = await fetch(`/api/vehicle?query=${normalize(debouncedValue)}`);
+        if (!res.ok) {
+          setError('Vehicle not found');
+          return;
+        }
+
+        const data = await res.json();
+        setSuggestions(data.suggestions);
+      } catch (error) {
+        console.error(error);
+        setError('Something went wrong');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResults();
+  }, [debouncedValue]);
 
   async function handleSearch() {
     if (!online) {
@@ -271,6 +305,22 @@ export default function HomePage() {
                   transition-all uppercase
                 "
               />
+              {suggestions.length > 0 && (
+                <ul className="mt-2 max-h-40 overflow-y-auto border border-appBorder rounded-lg bg-white shadow-sm">
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion}
+                      onClick={() => setValue(suggestion)}
+                      className="
+                        px-4 py-2 hover:bg-appPrimaryLight/50
+                        cursor-pointer text-appText text-sm
+                      "
+                    >
+                      {suggestion}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <p className="text-xs text-appMuted mt-2">
                 Enter the full vehicle registration number
               </p>

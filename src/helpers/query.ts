@@ -1,6 +1,6 @@
 import { eq, asc, sql, and } from 'drizzle-orm';
 import { db } from '..';
-import { vehical } from '@/db/schema/vehical';
+import { vehical } from '@/db/schema/vehicle';
 
 export async function getAllActiveVehicles() {
   return db

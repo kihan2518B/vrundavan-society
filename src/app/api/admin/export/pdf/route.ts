@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { eq, asc } from 'drizzle-orm';
 import { db } from '@/index';
-import { vehical } from '@/db/schema/vehical';
+import { vehical } from '@/db/schema/vehicle';
 
 export async function GET() {
   const rows = await db

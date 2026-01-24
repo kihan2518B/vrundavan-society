@@ -4,6 +4,7 @@ import VehicleFormSheet from '@/components/VehicleForm';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
+import ApartmentFormSheet from '@/components/ApartmentForm';
 
 async function fetchVehicles({ pageParam }: { pageParam?: string }) {
   const res = await fetch(`/api/admin/vehicle?limit=20${pageParam ? `&cursor=${pageParam}` : ''}`);
@@ -13,13 +14,14 @@ type Vehicle = {
   id: string;
   vehicleNumber: string;
   ownerName: string;
-  flatNumber: string;
+  blockNumber: string;
+  floor: string;
   contactNumber: string;
-  createdAt: string;
 };
 
 export default function AdminPage() {
   const [openForm, setOpenForm] = useState(false);
+  const [openApartmentForm, setOpenApartmentForm] = useState(false);
   const [editVehicle, setEditVehicle] = useState<Vehicle | undefined>(undefined);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } =
     useInfiniteQuery({
@@ -104,6 +106,27 @@ export default function AdminPage() {
                 />
               </svg>
               Add Vehicle
+            </button>
+            <button
+              onClick={() => {
+                setOpenApartmentForm(true);
+              }}
+              className="
+                flex items-center gap-2 px-4 py-2.5 rounded-lg
+                bg-appPrimary text-white font-medium text-sm
+                hover:bg-appPrimaryHover active:scale-98
+                shadow-button transition-all
+              "
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Add Apartment
             </button>
 
             <a
@@ -375,6 +398,12 @@ export default function AdminPage() {
         onSuccess={() => {
           refetch();
         }}
+      />
+      <ApartmentFormSheet
+        open={openApartmentForm}
+        onClose={() => setOpenApartmentForm(false)}
+        initialData={null}
+        onSuccess={() => {}}
       />
     </main>
   );

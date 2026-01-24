@@ -1,29 +1,34 @@
 import { NextResponse } from 'next/server';
-import { vehical } from '@/db/schema/vehical';
+import { vehicle } from '@/db/schema/vehicle';
 import { normalizeVehicleNumber } from '@/lib/normalize';
 import { db } from '@/index';
 import { eq, and, lt, desc } from 'drizzle-orm';
 
 export async function POST(req: Request) {
-  const { vehicleNumber, ownerName, flatNumber, contactNumber } = await req.json();
+  const { vehicleNumber, ownerName, contactNumber, blockNumber, floor, apartmentId } =
+    await req.json();
 
-  if (!vehicleNumber || !ownerName || !flatNumber || !contactNumber) {
+  if (!vehicleNumber || !ownerName || !contactNumber || !blockNumber || !floor) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
 
   const vn = normalizeVehicleNumber(vehicleNumber);
 
   try {
-    await db.insert(vehical).values({
+    await db.insert(vehicle).values({
       vehicleNumber: vn,
-      ownerName: ownerName.trim(),
-      flatNumber: flatNumber.trim(),
-      contactNumber: contactNumber.trim(),
+      name: ownerName.trim(),
+      mobile: contactNumber.trim(),
+      blockNumber: blockNumber,
+      floor: floor,
+      apartmentId: apartmentId,
+      createdBy: 'admin',
+      updatedBy: 'admin',
     });
 
     return NextResponse.json({ success: true, message: 'Vehicle added' }, { status: 201 });
   } catch (e) {
-    console.log('Error adding vehicle @/api/admin/vehical: ', e);
+    console.error('Error adding vehicle @/api/admin/vehicle: ', e);
     return NextResponse.json({ message: 'Vehicle already exists' }, { status: 500 });
   }
 }
@@ -34,21 +39,25 @@ export async function GET(req: Request) {
 
   const rows = await db
     .select({
-      id: vehical.id,
-      vehicleNumber: vehical.vehicleNumber,
-      ownerName: vehical.ownerName,
-      flatNumber: vehical.flatNumber,
-      contactNumber: vehical.contactNumber,
-      createdAt: vehical.createdAt,
+      id: vehicle.id,
+      vehicleNumber: vehicle.vehicleNumber,
+      ownerName: vehicle.name,
+      blockNumber: vehicle.blockNumber,
+      mobile: vehicle.mobile,
+      floor: vehicle.floor,
+      apartmentId: vehicle.apartmentId,
+      updatedBy: vehicle.updatedBy,
+      createdAt: vehicle.createdAt,
+      updatedAt: vehicle.updatedAt,
     })
-    .from(vehical)
+    .from(vehicle)
     .where(
       and(
-        eq(vehical.isDeleted, false),
-        cursor ? lt(vehical.createdAt, new Date(cursor)) : undefined
+        eq(vehicle.isDeleted, false),
+        cursor ? lt(vehicle.createdAt, new Date(cursor)) : undefined
       )
     )
-    .orderBy(desc(vehical.createdAt))
+    .orderBy(desc(vehicle.createdAt))
     .limit(limit + 1);
 
   const hasMore = rows.length > limit;

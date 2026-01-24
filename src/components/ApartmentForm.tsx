@@ -1,79 +1,77 @@
 'use client';
 
-import { normalizeVehicleNumber } from '@/lib/normalize';
 import { useState } from 'react';
 
-type VehicleFormProps = {
+type ApartmentFormProps = {
   mode: 'create' | 'edit';
   initialData?: {
     id?: string;
-    vehicleNumber: string;
-    ownerName: string;
-    blockNumber: string;
-    floor: string;
-    contactNumber: string;
-  };
+    apartmentName: string;
+    pramukhName: string;
+    pramukhMobile: string;
+    bahadurName: string;
+    bahadurMobile: string;
+  } | null;
   onSuccess?: () => void;
   onCancel?: () => void;
 };
 
-function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProps) {
+function ApartmentForm({ mode, initialData, onSuccess, onCancel }: ApartmentFormProps) {
   const isEdit = mode === 'edit' && initialData;
-  const [vehicleNumber, setVehicleNumber] = useState(isEdit ? initialData!.vehicleNumber : '');
-  const [ownerName, setOwnerName] = useState(isEdit ? initialData!.ownerName : '');
-  const [blockNumber, setBlockNumber] = useState(isEdit ? initialData!.blockNumber : '');
-  const [floor, setFloor] = useState(isEdit ? initialData!.floor : '');
-  const [contactNumber, setContactNumber] = useState(isEdit ? initialData!.contactNumber : '');
-  const [apartmentId, setApartmentId] = useState('1');
+  const [apartmentName, setApartmentName] = useState(isEdit ? initialData!.apartmentName : '');
+  const [pramukhName, setPramukhName] = useState(isEdit ? initialData!.pramukhName : '');
+  const [pramukhMobile, setPramukhMobile] = useState(isEdit ? initialData!.pramukhMobile : '');
+  const [bahadurName, setBahadurName] = useState(isEdit ? initialData!.bahadurName : '');
+  const [bahadurMobile, setBahadurMobile] = useState(isEdit ? initialData!.bahadurMobile : '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   async function handleSubmit() {
     // Validation
-    if (!vehicleNumber.trim()) {
-      setError('Vehicle number is required');
+    if (!apartmentName.trim()) {
+      setError('Apartment name is required');
       return;
     }
-    if (!ownerName.trim()) {
-      setError('Owner name is required');
+    if (!pramukhName.trim()) {
+      setError('Pramukh name is required');
       return;
     }
-    if (!blockNumber.trim()) {
-      setError('Flat/House number is required');
+    if (!pramukhMobile.trim()) {
+      setError('Pramukh mobile is required');
       return;
     }
-    if (!contactNumber.trim()) {
-      setError('Contact number is required');
+    if (pramukhMobile.trim().length < 10) {
+      setError('Pramukh mobile number must be at least 10 digits');
       return;
     }
-    if (!floor.trim()) {
-      setError('Floor is required');
+    if (!bahadurName.trim()) {
+      setError('Bahadur name is required');
+      return;
+    }
+    if (!bahadurMobile.trim()) {
+      setError('Bahadur mobile is required');
+      return;
+    }
+    if (bahadurMobile.trim().length < 10) {
+      setError('Bahadur mobile number must be at least 10 digits');
       return;
     }
 
-    if (!apartmentId) {
-      setError('Apartment is required');
-      return;
-    }
-    if (!contactNumber.trim() || contactNumber.trim().length !== 10) {
-      setError('Enter a valid 10-digit contact number');
-      return;
-    }
     setLoading(true);
     setError(null);
     setSuccess(false);
 
     const payload = {
-      vehicleNumber: normalizeVehicleNumber(vehicleNumber),
-      ownerName: ownerName.trim(),
-      blockNumber: blockNumber.trim(),
-      floor: floor.trim(),
-      contactNumber: contactNumber.trim(),
-      apartmentId: apartmentId,
+      apartmentName: apartmentName.trim(),
+      pramukhName: pramukhName.trim(),
+      pramukhMobile: pramukhMobile.trim(),
+      bahadurName: bahadurName.trim(),
+      bahadurMobile: bahadurMobile.trim(),
     };
 
-    const url = mode === 'create' ? '/api/admin/vehicle' : `/api/admin/vehicle/${initialData?.id}`;
+    const url =
+      mode === 'create' ? '/api/admin/apartment' : `/api/admin/apartment/${initialData?.id}`;
     const method = mode === 'create' ? 'POST' : 'PATCH';
 
     try {
@@ -94,10 +92,11 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
 
       // Clear form if creating
       if (mode === 'create') {
-        setVehicleNumber('');
-        setOwnerName('');
-        setBlockNumber('');
-        setContactNumber('');
+        setApartmentName('');
+        setPramukhName('');
+        setPramukhMobile('');
+        setBahadurName('');
+        setBahadurMobile('');
       }
 
       // Call success callback after a brief delay to show success message
@@ -132,7 +131,9 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
           </svg>
           <div>
             <p className="text-sm font-medium text-appText">
-              {mode === 'create' ? 'Vehicle added successfully!' : 'Vehicle updated successfully!'}
+              {mode === 'create'
+                ? 'Apartment added successfully!'
+                : 'Apartment updated successfully!'}
             </p>
           </div>
         </div>
@@ -175,10 +176,10 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
 
       {/* Form Fields */}
       <div className="space-y-4">
-        {/* Vehicle Number */}
+        {/* Apartment Name */}
         <div>
-          <label htmlFor="vehicleNumber" className="block text-sm font-medium text-appText mb-1.5">
-            Vehicle Number <span className="text-danger">*</span>
+          <label htmlFor="apartmentName" className="block text-sm font-medium text-appText mb-1.5">
+            Apartment Name <span className="text-danger">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -197,16 +198,16 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
               </svg>
             </div>
             <input
-              id="vehicleNumber"
+              id="apartmentName"
               type="text"
-              placeholder="e.g., GJ01AB1234"
-              value={vehicleNumber}
-              onChange={(e) => setVehicleNumber(e.target.value.toUpperCase())}
+              placeholder="e.g., ANJANISUT APARTMENT"
+              value={apartmentName}
+              onChange={(e) => setApartmentName(e.target.value)}
               className="
                 w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
                 text-appText bg-white
                 focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
-                transition-all uppercase
+                transition-all
               "
               disabled={loading}
             />
@@ -215,8 +216,8 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
 
         {/* Owner Name */}
         <div>
-          <label htmlFor="ownerName" className="block text-sm font-medium text-appText mb-1.5">
-            Owner Name <span className="text-danger">*</span>
+          <label htmlFor="pramukhName" className="block text-sm font-medium text-appText mb-1.5">
+            pramukhName <span className="text-danger">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -235,85 +236,11 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
               </svg>
             </div>
             <input
-              id="ownerName"
+              id="pramukhName"
               type="text"
               placeholder="Enter owner's full name"
-              value={ownerName}
-              onChange={(e) => setOwnerName(e.target.value)}
-              className="
-                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
-                text-appText bg-white
-                focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
-                transition-all
-              "
-              disabled={loading}
-            />
-          </div>
-        </div>
-        {/* apartment Id */}
-        <div>
-          <label htmlFor="apartmentId" className="block text-sm font-medium text-appText mb-1.5">
-            Apartment Id <span className="text-danger">*</span>
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-appMuted"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
-            </div>
-            <input
-              id="apartmentId"
-              type="text"
-              placeholder="e.g., 1,2"
-              value={apartmentId}
-              onChange={(e) => setApartmentId(e.target.value)}
-              className="
-                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
-                text-appText bg-white
-                focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
-                transition-all
-              "
-              disabled={loading}
-            />
-          </div>
-        </div>
-        {/* Block Number */}
-        <div>
-          <label htmlFor="blockNumber" className="block text-sm font-medium text-appText mb-1.5">
-            Block Number <span className="text-danger">*</span>
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-appMuted"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
-            </div>
-            <input
-              id="blockNumber"
-              type="text"
-              placeholder="e.g., 1,2"
-              value={blockNumber}
-              onChange={(e) => setBlockNumber(e.target.value)}
+              value={pramukhName}
+              onChange={(e) => setPramukhName(e.target.value)}
               className="
                 w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
                 text-appText bg-white
@@ -325,10 +252,10 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
           </div>
         </div>
 
-        {/* Floor */}
+        {/* Pramukh Mobile */}
         <div>
-          <label htmlFor="floor" className="block text-sm font-medium text-appText mb-1.5">
-            Floor <span className="text-danger">*</span>
+          <label htmlFor="pramukhMobile" className="block text-sm font-medium text-appText mb-1.5">
+            Pramukh Mobile <span className="text-danger">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -347,11 +274,11 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
               </svg>
             </div>
             <input
-              id="floor"
-              type="text"
-              placeholder="e.g., 1,2"
-              value={floor}
-              onChange={(e) => setFloor(e.target.value)}
+              id="pramukhMobile"
+              type="tel"
+              placeholder="Enter Pramukh's mobile number"
+              value={pramukhMobile}
+              onChange={(e) => setPramukhMobile(e.target.value)}
               className="
                 w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
                 text-appText bg-white
@@ -363,10 +290,10 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
           </div>
         </div>
 
-        {/* Contact Number */}
+        {/* Bahadur Name */}
         <div>
-          <label htmlFor="contactNumber" className="block text-sm font-medium text-appText mb-1.5">
-            Contact Number <span className="text-danger">*</span>
+          <label htmlFor="bahadurName" className="block text-sm font-medium text-appText mb-1.5">
+            Bahadur Name <span className="text-danger">*</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -385,11 +312,49 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
               </svg>
             </div>
             <input
-              id="contactNumber"
+              id="bahadurName"
+              type="text"
+              placeholder="Enter Bahadur's full name"
+              value={bahadurName}
+              onChange={(e) => setBahadurName(e.target.value)}
+              className="
+                w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
+                text-appText bg-white
+                focus:outline-none focus:border-appPrimary focus:ring-4 focus:ring-appPrimaryLight
+                transition-all
+              "
+              disabled={loading}
+            />
+          </div>
+        </div>
+
+        {/* Bahadur Mobile */}
+        <div>
+          <label htmlFor="bahadurMobile" className="block text-sm font-medium text-appText mb-1.5">
+            Bahadur Mobile <span className="text-danger">*</span>
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg
+                className="w-5 h-5 text-appMuted"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+            </div>
+            <input
+              id="bahadurMobile"
               type="tel"
-              placeholder="Enter 10-digit mobile number"
-              value={contactNumber}
-              onChange={(e) => setContactNumber(e.target.value)}
+              placeholder="Enter Bahadur's mobile number"
+              value={bahadurMobile}
+              onChange={(e) => setBahadurMobile(e.target.value)}
               className="
                 w-full border-2 border-appBorder rounded-lg pl-10 pr-4 py-3
                 text-appText bg-white
@@ -462,7 +427,7 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
                       d="M12 4v16m8-8H4"
                     />
                   </svg>
-                  Add Vehicle
+                  Add Apartment
                 </>
               ) : (
                 <>
@@ -474,7 +439,7 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  Update Vehicle
+                  Update Apartment
                 </>
               )}
             </>
@@ -484,16 +449,16 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
     </div>
   );
 }
-type Vehicle = {
+type Apartment = {
   id: string;
-  vehicleNumber: string;
-  ownerName: string;
-  blockNumber: string;
-  floor: string;
-  contactNumber: string;
+  apartmentName: string;
+  pramukhName: string;
+  pramukhMobile: string;
+  bahadurName: string;
+  bahadurMobile: string;
 };
 
-export default function VehicleFormSheet({
+export default function ApartmentFormSheet({
   open,
   onClose,
   initialData,
@@ -501,7 +466,7 @@ export default function VehicleFormSheet({
 }: {
   open: boolean;
   onClose: () => void;
-  initialData: Vehicle | undefined;
+  initialData: Apartment | null;
   onSuccess?: () => void;
 }) {
   if (!open) return null;
@@ -557,10 +522,10 @@ export default function VehicleFormSheet({
 
           {/* Form Content */}
           <div className="p-4">
-            <VehicleForm
+            <ApartmentForm
               key={initialData?.id ?? 'create'}
               mode={initialData ? 'edit' : 'create'}
-              initialData={initialData}
+              initialData={null}
               onSuccess={onSuccess}
               onCancel={onClose}
             />

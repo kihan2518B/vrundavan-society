@@ -2,19 +2,20 @@ import { NextResponse } from 'next/server';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { eq, asc } from 'drizzle-orm';
 import { db } from '@/index';
-import { vehical } from '@/db/schema/vehicle';
+import { vehicle } from '@/db/schema/vehicle';
 
 export async function GET() {
   const rows = await db
     .select({
-      vehicleNumber: vehical.vehicleNumber,
-      ownerName: vehical.ownerName,
-      flatNumber: vehical.flatNumber,
-      contactNumber: vehical.contactNumber,
+      vehicleNumber: vehicle.vehicleNumber,
+      ownerName: vehicle.name,
+      blockNumber: vehicle.blockNumber,
+      mobile: vehicle.mobile,
+      floor: vehicle.floor,
     })
-    .from(vehical)
-    .where(eq(vehical.isDeleted, false))
-    .orderBy(asc(vehical.flatNumber));
+    .from(vehicle)
+    .where(eq(vehicle.isDeleted, false))
+    .orderBy(asc(vehicle.blockNumber));
 
   const pdfDoc = await PDFDocument.create();
 
@@ -62,8 +63,8 @@ export async function GET() {
 
     drawText(v.vehicleNumber, 40);
     drawText(v.ownerName, 160);
-    drawText(v.flatNumber, 320);
-    drawText(v.contactNumber, 380);
+    drawText(v.blockNumber, 320);
+    drawText(v.mobile, 380);
 
     y -= 15;
   }

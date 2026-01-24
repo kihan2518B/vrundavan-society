@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import ApartmentFormSheet from '@/components/ApartmentForm';
+import BulkImportCard from '@/components/BulkImportCard';
 
 async function fetchVehicles({ pageParam }: { pageParam?: string }) {
   const res = await fetch(`/api/admin/vehicle?limit=20${pageParam ? `&cursor=${pageParam}` : ''}`);
@@ -49,7 +50,7 @@ export default function AdminPage() {
   const totalCount = vehicles.length;
 
   return (
-    <main className="min-h-screen bg-appBg flex flex-col">
+    <main className=" bg-appBg flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-appSurface border-b border-appBorder shadow-card">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -168,6 +169,24 @@ export default function AdminPage() {
               </svg>
               PDF
             </a>
+            <section className="max-w-4xl mx-auto px-4 pb-10 space-y-6">
+              <h2 className="text-lg font-semibold text-appText">Bulk Import</h2>
+              <div className="flex gap-4">
+                <BulkImportCard
+                  title="Import_Apartments"
+                  description="Upload Excel to add or update apartments"
+                  uploadUrl="/api/admin/import/apartments"
+                  templateUrl="/template/apartment_template.xlsx"
+                />
+
+                <BulkImportCard
+                  title="Import_Vehicles"
+                  description="Upload Excel to add vehicles to existing apartments"
+                  uploadUrl="/api/admin/import/vehicles"
+                  templateUrl="/template/vehicle_template.xlsx"
+                />
+              </div>
+            </section>
           </div>
         </div>
       </header>
@@ -383,7 +402,7 @@ export default function AdminPage() {
             {/* End of List */}
             {!hasNextPage && vehicles.length > 10 && (
               <div className="text-center py-6">
-                <p className="text-sm text-appMuted">You've reached the end of the list</p>
+                <p className="text-sm text-appMuted">You&apos;ve reached the end of the list</p>
               </div>
             )}
           </div>

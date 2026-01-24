@@ -45,7 +45,7 @@
   }
 
   p {
-    font-family: "IBM Plex Sans", sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
   }
 }
 /* ================================
@@ -53,7 +53,7 @@
    ================================ */
 :root {
   /* Core colors */
-  --color-bg: #000000;        /* near-black for better readability */
+  --color-bg: #000000; /* near-black for better readability */
   --color-fg: #ffffff;
   --color-primary: #70ffef;
 
@@ -74,8 +74,16 @@ html,
 body {
   background-color: var(--color-bg);
   color: var(--color-fg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Ubuntu,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
   text-rendering: optimizeLegibility;
 }
 

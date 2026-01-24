@@ -4,6 +4,7 @@ import { normalizeText, normalizeVehicleNumber } from '@/lib/normalize';
 import { db } from '@/index';
 import { vehicle } from '@/db/schema/vehicle';
 import { eq, sql, and } from 'drizzle-orm';
+import { VehicleImportLog } from '@/types';
 
 const REQUIRED_COLUMNS = [
   'apartment_name',
@@ -14,13 +15,6 @@ const REQUIRED_COLUMNS = [
   'mobile',
 ];
 
-type LogEntry = {
-  rowNumber: number;
-  apartmentName: string;
-  vehicleNumber: string;
-  status: 'FAILED' | 'SKIPPED' | 'RESTORED' | 'SUCCESS';
-  reason?: string;
-};
 type ImportRow = {
   vehicle_number: string;
   block_number: string;
@@ -55,13 +49,13 @@ export async function POST(req: Request) {
     }
   }
 
-  const logs: LogEntry[] = [];
+  const logs: VehicleImportLog[] = [];
   let success = 0;
   let skipped = 0;
   let restored = 0;
   let failed = 0;
 
-  const adminUsername = 'system'; // replace with session value
+  const adminUsername = 'admin'; // replace with session value
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i] as ImportRow;
@@ -77,7 +71,6 @@ export async function POST(req: Request) {
       failed++;
       logs.push({
         rowNumber: i + 2,
-        apartmentName: row.apartment_name,
         vehicleNumber: row.vehicle_number,
         status: 'FAILED',
         reason: 'Required field missing',
@@ -96,7 +89,6 @@ export async function POST(req: Request) {
       failed++;
       logs.push({
         rowNumber: i + 2,
-        apartmentName: row.apartment_name,
         vehicleNumber,
         status: 'FAILED',
         reason: 'Apartment not found',
@@ -112,7 +104,6 @@ export async function POST(req: Request) {
       skipped++;
       logs.push({
         rowNumber: i + 2,
-        apartmentName: row.apartment_name,
         vehicleNumber,
         status: 'SKIPPED',
         reason: 'Vehicle already exists',
@@ -137,7 +128,6 @@ export async function POST(req: Request) {
       restored++;
       logs.push({
         rowNumber: i + 2,
-        apartmentName: row.apartment_name,
         vehicleNumber,
         status: 'RESTORED',
       });
@@ -158,7 +148,6 @@ export async function POST(req: Request) {
     success++;
     logs.push({
       rowNumber: i + 2,
-      apartmentName: row.apartment_name,
       vehicleNumber,
       status: 'SUCCESS',
     });

@@ -3,6 +3,7 @@ import { and, eq, ilike } from 'drizzle-orm';
 import { db } from '@/index';
 import { vehicle } from '@/db/schema/vehicle';
 import { normalizeVehicleNumber } from '@/lib/normalize';
+import { apartment } from '@/db/schema';
 
 export const runtime = 'edge';
 
@@ -18,9 +19,6 @@ export async function GET(req: NextRequest) {
   if (query) {
     const result = await db
       .select({
-        ownerName: vehicle.name,
-        flatNumber: vehicle.blockNumber,
-        contactNumber: vehicle.mobile,
         vehicleNumber: vehicle.vehicleNumber,
       })
       .from(vehicle)
@@ -31,23 +29,42 @@ export async function GET(req: NextRequest) {
   }
   if (rawNumber) {
     const vehicleNumber = normalizeVehicleNumber(rawNumber);
-    console.log('vehicleNumber: ', vehicleNumber);
 
-    const result = await db
-      .select({
-        ownerName: vehicle.name,
-        flatNumber: vehicle.blockNumber,
-        contactNumber: vehicle.mobile,
-      })
-      .from(vehicle)
-      .where(and(eq(vehicle.vehicleNumber, vehicleNumber), eq(vehicle.isDeleted, false)))
-      .limit(1);
-    console.log('result:', result);
+    const result = await getVehicleWithApartment(vehicleNumber);
 
-    if (result.length === 0) {
+    if (!result) {
       return NextResponse.json({ found: false }, { status: 404 });
     }
 
-    return NextResponse.json({ found: true, data: result[0] }, { status: 200 });
+    return NextResponse.json({ found: true, data: result }, { status: 200 });
   }
+}
+
+export async function getVehicleWithApartment(vehicleNumber: string) {
+  const result = await db
+    .select({
+      vehicleNumber: vehicle.vehicleNumber,
+      ownerName: vehicle.name,
+      ownerMobile: vehicle.mobile,
+      blockNumber: vehicle.blockNumber,
+      floor: vehicle.floor,
+
+      apartmentName: apartment.apartmentName,
+      pramukhName: apartment.pramukhName,
+      pramukhMobile: apartment.pramukhMobile,
+      bahadurName: apartment.bahadurName,
+      bahadurMobile: apartment.bahadurMobile,
+    })
+    .from(vehicle)
+    .innerJoin(apartment, eq(vehicle.apartmentId, apartment.id))
+    .where(
+      and(
+        eq(vehicle.vehicleNumber, vehicleNumber),
+        eq(vehicle.isDeleted, false),
+        eq(apartment.isDeleted, false)
+      )
+    )
+    .limit(1);
+
+  return result[0] ?? null;
 }

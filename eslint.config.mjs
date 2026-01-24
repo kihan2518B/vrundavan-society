@@ -5,6 +5,19 @@ import nextTs from 'eslint-config-next/typescript';
 import prettier from 'eslint-config-prettier/flat';
 
 const eslintConfig = defineConfig([
+  // Ignore patterns (migrated from .eslintignore)
+  globalIgnores([
+    'node_modules/**',
+    '.next/**',
+    'out/**',
+    'build/**',
+    'dist/**',
+    'next-env.d.ts',
+    'package-lock.json',
+    'yarn.lock',
+    '.env',
+    '.env.local',
+  ]),
   ...nextVitals,
   ...nextTs,
   prettier,
@@ -13,19 +26,11 @@ const eslintConfig = defineConfig([
       next: eslintNextPlugin,
     },
     rules: {
-      'react/no-unescaped-entities': 1,
+      'react/no-unescaped-entities': 0,
       '@next/next/no-page-custom-font': 0,
       'no-unused-vars': 2,
     },
   },
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    '.next/**',
-    'out/**',
-    'build/**',
-    'next-env.d.ts',
-  ]),
 ]);
 
 export default eslintConfig;

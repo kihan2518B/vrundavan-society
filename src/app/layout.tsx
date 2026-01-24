@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Providers from '@/lib/queryprovider';
+import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -29,9 +31,12 @@ export default function RootLayout({
       <link rel="manifest" href="/manifest.json" />
       <meta name="theme-color" content="#000000" />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-appBg text-appText h-screen w-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-appBg text-appText h-screen w-screen flex flex-col`}
       >
+        <Navbar />
+
         <Providers>{children}</Providers>
+        <Footer />
       </body>
     </html>
   );

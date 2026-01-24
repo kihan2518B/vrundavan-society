@@ -1,41 +1,41 @@
 import { eq, asc, sql, and } from 'drizzle-orm';
 import { db } from '..';
-import { vehical } from '@/db/schema/vehicle';
+import { vehicle } from '@/db/schema/vehicle';
 
 export async function getAllActiveVehicles() {
   return db
     .select({
-      vehicleNumber: vehical.vehicleNumber,
-      ownerName: vehical.ownerName,
-      flatNumber: vehical.flatNumber,
-      createdAt: vehical.createdAt,
+      vehicleNumber: vehicle.vehicleNumber,
+      name: vehicle.name,
+      blockNumber: vehicle.blockNumber,
+      createdAt: vehicle.createdAt,
     })
-    .from(vehical)
-    .where(eq(vehical.isDeleted, false))
-    .orderBy(asc(vehical.flatNumber), asc(vehical.vehicleNumber));
+    .from(vehicle)
+    .where(eq(vehicle.isDeleted, false))
+    .orderBy(asc(vehicle.blockNumber), asc(vehicle.vehicleNumber));
 }
 
 export async function getFlatWiseCounts() {
   return db
     .select({
-      flatNumber: vehical.flatNumber,
-      totalvehical: sql<number>`count(*)`,
+      blockNumber: vehicle.blockNumber,
+      totalvehicle: sql<number>`count(*)`,
     })
-    .from(vehical)
-    .where(eq(vehical.isDeleted, false))
-    .groupBy(vehical.flatNumber)
+    .from(vehicle)
+    .where(eq(vehicle.isDeleted, false))
+    .groupBy(vehicle.blockNumber)
     .orderBy(sql`count(*) DESC`);
 }
 
 export async function getVehiclesByFlat(flat: string) {
   return db
     .select({
-      vehicleNumber: vehical.vehicleNumber,
-      ownerName: vehical.ownerName,
+      vehicleNumber: vehicle.vehicleNumber,
+      name: vehicle.name,
     })
-    .from(vehical)
-    .where(and(eq(vehical.isDeleted, false), eq(vehical.flatNumber, flat)))
-    .orderBy(asc(vehical.vehicleNumber));
+    .from(vehicle)
+    .where(and(eq(vehicle.isDeleted, false), eq(vehicle.blockNumber, flat)))
+    .orderBy(asc(vehicle.vehicleNumber));
 }
 
 export async function getTotals() {
@@ -43,8 +43,8 @@ export async function getTotals() {
     .select({
       count: sql<number>`count(*)`,
     })
-    .from(vehical)
-    .where(eq(vehical.isDeleted, false));
+    .from(vehicle)
+    .where(eq(vehicle.isDeleted, false));
 
   return { totalVehicles: count };
 }

@@ -95,7 +95,7 @@ export default function Page() {
         setLoading(false);
         return;
       }
-
+      console.log('Login response:', res);
       // Successful login
       router.push('/admin');
     } catch (err) {

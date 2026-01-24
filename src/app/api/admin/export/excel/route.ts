@@ -2,38 +2,41 @@ import { NextResponse } from 'next/server';
 import ExcelJS from 'exceljs';
 import { eq, asc } from 'drizzle-orm';
 import { db } from '@/index';
-import { vehical } from '@/db/schema/vehicle';
+import { vehicle } from '@/db/schema/vehicle';
 
 export async function GET() {
   const rows = await db
     .select({
-      vehicleNumber: vehical.vehicleNumber,
-      ownerName: vehical.ownerName,
-      flatNumber: vehical.flatNumber,
-      contactNumber: vehical.contactNumber,
-      createdAt: vehical.createdAt,
+      vehicleNumber: vehicle.vehicleNumber,
+      name: vehicle.name,
+      blockNumber: vehicle.blockNumber,
+      mobile: vehicle.mobile,
+      floor: vehicle.floor,
+      createdAt: vehicle.createdAt,
     })
-    .from(vehical)
-    .where(eq(vehical.isDeleted, false))
-    .orderBy(asc(vehical.flatNumber));
+    .from(vehicle)
+    .where(eq(vehicle.isDeleted, false))
+    .orderBy(asc(vehicle.blockNumber));
 
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet('Vehicles');
 
   sheet.columns = [
     { header: 'Vehicle Number', key: 'vehicleNumber', width: 20 },
-    { header: 'Owner Name', key: 'ownerName', width: 25 },
-    { header: 'Flat Number', key: 'flatNumber', width: 15 },
-    { header: 'Contact Number', key: 'contactNumber', width: 18 },
+    { header: 'Owner Name', key: 'name', width: 25 },
+    { header: 'Flat Number', key: 'blockNumber', width: 15 },
+    { header: 'Floor', key: 'floor', width: 10 },
+    { header: 'Contact Number', key: 'mobile', width: 18 },
     { header: 'Added On', key: 'createdAt', width: 18 },
   ];
 
   rows.forEach((v) => {
     sheet.addRow({
       vehicleNumber: v.vehicleNumber,
-      ownerName: v.ownerName,
-      flatNumber: v.flatNumber,
-      contactNumber: v.contactNumber,
+      name: v.name,
+      floor: v.floor,
+      blockNumber: v.blockNumber,
+      mobile: v.mobile,
       createdAt: v.createdAt ? new Date(v.createdAt).toLocaleDateString() : '',
     });
   });

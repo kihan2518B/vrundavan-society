@@ -51,6 +51,14 @@ export default function Navbar() {
                 <span className="font-medium text-sm">Admin Panel</span>
               </Link>
               <Link
+                href="/admin"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-appPrimaryLight text-appText hover:text-appPrimary transition group"
+                onClick={() => setIsOpen(false)}
+              >
+                <Settings size={18} className="text-appMuted group-hover:text-appPrimary" />
+                <span className="font-medium text-sm">Admin Panel</span>
+              </Link>
+              <Link
                 href="/about"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-appPrimaryLight text-appText hover:text-appPrimary transition group"
                 onClick={() => setIsOpen(false)}

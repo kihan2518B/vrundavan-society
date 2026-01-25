@@ -415,7 +415,7 @@ export default function ApartmentFormSheet({
 }: {
   open: boolean;
   onClose: () => void;
-  initialData: Apartment | null;
+  initialData: Apartment | undefined;
   onSuccess?: () => void;
 }) {
   if (!open) return null;

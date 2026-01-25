@@ -62,13 +62,7 @@ export async function POST(req: Request) {
 
     const apartmentName = normalizeText(row.apartment_name || '');
 
-    if (
-      !apartmentName ||
-      !row.pramukh_name ||
-      !row.pramukh_mobile ||
-      !row.bahadur_name ||
-      !row.bahadur_mobile
-    ) {
+    if (!apartmentName || !row.pramukh_name || !row.pramukh_mobile) {
       failed++;
       logs.push({
         rowNumber: i + 2,
@@ -89,8 +83,8 @@ export async function POST(req: Request) {
         .set({
           pramukhName: row.pramukh_name,
           pramukhMobile: row.pramukh_mobile,
-          bahadurName: row.bahadur_name,
-          bahadurMobile: row.bahadur_mobile,
+          bahadurName: row.bahadur_name ?? '-',
+          bahadurMobile: row.bahadur_mobile ?? '-',
           updatedAt: new Date(),
         })
         .where(eq(apartment.id, existing.id));

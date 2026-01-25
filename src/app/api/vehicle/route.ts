@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
         vehicleNumber: vehicle.vehicleNumber,
       })
       .from(vehicle)
-      .where(ilike(vehicle.vehicleNumber, `%${query}%`))
+      .where(and(ilike(vehicle.vehicleNumber, `%${query}%`), eq(vehicle.isDeleted, false)))
       .limit(10);
 
     return NextResponse.json({ suggestions: result.map((r) => r.vehicleNumber) }, { status: 200 });

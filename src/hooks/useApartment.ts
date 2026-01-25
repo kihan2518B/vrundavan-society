@@ -7,7 +7,7 @@ type ApartmentOption = {
 };
 
 async function fetchApartments(): Promise<ApartmentOption[]> {
-  const res = await fetch('/api/admin/apartment');
+  const res = await fetch('/api/admin/apartment?onlyNames=true');
   if (!res.ok) throw new Error('Failed to load apartments');
   const data = await res.json();
   return data.data;

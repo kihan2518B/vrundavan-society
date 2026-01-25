@@ -438,14 +438,13 @@ export default function AdminPage() {
 
   const { data: apartments } = useApartments();
 
-  const { data, fetchNextPage, hasNextPage, refetch } =
-    useInfiniteQuery({
-      queryKey: ['vehicles', filters],
-      queryFn: ({ pageParam }) => fetchVehicles({ pageParam, filters }),
-      enabled: view === 'vehicle',
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialPageParam: undefined,
-    });
+  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
+    queryKey: ['vehicles', filters],
+    queryFn: ({ pageParam }) => fetchVehicles({ pageParam, filters }),
+    enabled: view === 'vehicle',
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialPageParam: undefined,
+  });
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -460,7 +459,7 @@ export default function AdminPage() {
 
   /* ----------------------------- UI ----------------------------- */
   return (
-    <main className="min-h-screen bg-appBg flex flex-col">
+    <main className="min-h-fit bg-appBg flex flex-col">
       {/* HEADER */}
       <header className="sticky top-0 z-20 bg-appSurface border-b border-appBorder">
         <div className="max-w-5xl mx-auto px-4 py-3 space-y-3">

@@ -3,6 +3,7 @@ import './globals.css';
 import Providers from '@/lib/queryprovider';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import { Noto_Sans_Gujarati } from 'next/font/google';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -13,6 +14,11 @@ const geistMono = localFont({
   src: './fonts/GeistMonoVF.woff',
   variable: '--font-geist-mono',
   weight: '100 900',
+});
+const gujarati = Noto_Sans_Gujarati({
+  subsets: ['gujarati'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
 });
 
 export const metadata = {
@@ -40,7 +46,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-appBg text-appText h-screen w-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${gujarati.className} antialiased bg-appBg text-appText h-screen w-screen flex flex-col`}
       >
         <Navbar />
 

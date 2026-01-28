@@ -162,6 +162,7 @@ export default function InstallPrompt() {
 
   const [hasBIPEvent, setHasBIPEvent] = useState(false);
   const [dismissed, setDismissed] = useState(() => {
+    if (typeof window === 'undefined') return false;
     return localStorage.getItem('pwa-install-dismissed') === 'true';
   });
 

@@ -95,7 +95,7 @@ export default function AdminPage() {
 
   const { data: apartments } = useApartments();
 
-  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['vehicles', filters],
     queryFn: ({ pageParam }) => fetchVehicles({ pageParam, filters }),
     enabled: view === 'vehicle',
@@ -236,6 +236,7 @@ export default function AdminPage() {
                 <table className="min-w-full bg-appSurface border border-appBorder rounded-lg overflow-hidden">
                   <thead className="bg-appBg text-xs text-appMuted">
                     <tr>
+                      <th className="px-4 py-3 text-left">Sr. No</th>
                       <th className="px-4 py-3 text-left">Vehicle</th>
                       <th className="px-4 py-3 text-left hidden sm:table-cell">Owner</th>
                       <th className="px-4 py-3 text-left hidden sm:table-cell">Block</th>
@@ -245,8 +246,9 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {vehicles.map((v) => (
+                    {vehicles.map((v, index) => (
                       <tr key={v.id} className="border-t border-appBorder hover:bg-appBg">
+                        <td className="font-medium text-appText px-4 py-3">{index + 1}</td>
                         <td className="px-4 py-3 font-medium text-appText">
                           {v.vehicleNumber}
                           <div className="sm:hidden text-xs text-appMuted">
@@ -296,6 +298,7 @@ export default function AdminPage() {
         )}
       </section>
       {view === 'vehicle' && hasNextPage && <div ref={loadMoreRef} className="h-8 w-full" />}
+      {isFetchingNextPage && <p className="text-center text-sm text-appMuted">Loading more…</p>}
 
       {/* FORMS */}
       <VehicleFormSheet

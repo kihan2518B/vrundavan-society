@@ -84,8 +84,9 @@ export default function ApartmentTable({
             </tr>
           </thead>
           <tbody>
-            {apartments.map((v) => (
+            {apartments.map((v, index) => (
               <tr key={v.id} className="border-t border-appBorder hover:bg-appBg">
+                <td className="px-4 py-3 font-medium text-appText">{index + 1}</td>
                 <td className="px-4 py-3 font-medium text-appText">
                   {v.apartmentName}
                   <div className="sm:hidden text-xs text-appMuted">

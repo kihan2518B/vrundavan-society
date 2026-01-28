@@ -1,174 +1,323 @@
-// 'use client';
+'use client';
 
-// import { useEffect, useState } from 'react';
-// import Image from 'next/image';
-// import Link from 'next/link';
-// import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import Image from 'next/image';
+import { PhoneCall } from 'lucide-react';
 
-// /* ---------------- Carousel Component ---------------- */
+const ImageCarousel = ({ images, alt }: { images: string[]; alt: string }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-// function ImageCarousel({ images, altPrefix }: { images: string[]; altPrefix: string }) {
-//   const [index, setIndex] = useState(0);
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
 
-//   useEffect(() => {
-//     const timer = setInterval(() => {
-//       setIndex((i) => (i + 1) % images.length);
-//     }, 4000);
-//     return () => clearInterval(timer);
-//   }, [images.length]);
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
 
-//   return (
-//     <div className="relative w-full overflow-hidden rounded-xl border border-appBorder bg-appBg">
-//       <div className="relative h-56 sm:h-72">
-//         <Image
-//           src={images[index]}
-//           alt={`${altPrefix} ${index + 1}`}
-//           fill
-//           className="object-cover"
-//           priority
-//         />
-//       </div>
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
-//       {/* Left */}
-//       <button
-//         onClick={() => setIndex((i) => (i === 0 ? images.length - 1 : i - 1))}
-//         className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-1 shadow"
-//       >
-//         <ChevronLeft className="w-5 h-5" />
-//       </button>
+  return (
+    <div className="relative w-full aspect-square group">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0"
+        >
+          <img
+            src={images[currentIndex]}
+            alt={`${alt} ${currentIndex + 1}`}
+            className="w-full h-full object-cover rounded-2xl"
+          />
+        </motion.div>
+      </AnimatePresence>
 
-//       {/* Right */}
-//       <button
-//         onClick={() => setIndex((i) => (i + 1) % images.length)}
-//         className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-1 shadow"
-//       >
-//         <ChevronRight className="w-5 h-5" />
-//       </button>
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/95 hover:bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+        aria-label="Previous image"
+      >
+        <svg className="w-5 h-5 text-appText" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/95 hover:bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+        aria-label="Next image"
+      >
+        <svg className="w-5 h-5 text-appText" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
 
-//       {/* Dots */}
-//       <div className="absolute bottom-2 w-full flex justify-center gap-2">
-//         {images.map((_, i) => (
-//           <button
-//             key={i}
-//             onClick={() => setIndex(i)}
-//             className={`w-2 h-2 rounded-full ${i === index ? 'bg-appPrimary' : 'bg-appBorder'}`}
-//           />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
+      {/* Dots Indicator */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        {images.map((_: string, idx: number) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              idx === currentIndex ? 'bg-white w-8' : 'bg-white/60 hover:bg-white/80 w-2'
+            }`}
+            aria-label={`Go to image ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
-// /* ---------------- Page ---------------- */
+export default function AboutPage() {
+  const apaxhubImages = [
+    '/apaxhub/apaxhub-approach.png',
+    '/apaxhub/service_2.png',
+    '/apaxhub/service_3.png',
+    '/apaxhub/service_4.png',
+  ];
 
-// export default function AboutPage() {
-//   return (
-//     <main className="min-h-fit bg-appBg font-['Noto Sans Gujarati',sans-serif]">
-//       <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
-//         {/* HEADER */}
-//         <div className="flex items-center gap-3">
-//           <Link
-//             href="/"
-//             className="px-3 py-1 rounded-lg bg-appSurface border border-appBorder text-sm"
-//           >
-//             ← પાછા જાઓ
-//           </Link>
-//           <h1 className="text-xl font-semibold text-appText">અમારા વિશે</h1>
-//         </div>
+  const shivBatteryImages = [
+    '/shiv_battery_zone/image_1.jpg',
+    '/shiv_battery_zone/image_2.jpg',
+    '/shiv_battery_zone/image_3.jpeg',
+    '/shiv_battery_zone/image_4.jpeg',
+  ];
 
-//         {/* ================= APAXHUB ================= */}
-//         <section className="bg-appSurface rounded-2xl p-6 shadow-card space-y-6">
-//           <h1 className="text-2xl font-bold text-appText">
-//             Apaxhub – ડિજિટલ ઉકેલો જે બિઝનેસ વધારશે 🚀
-//           </h1>
+  return (
+    <main className="bg-appBg text-appText min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-16 space-y-24">
+        {/* ===================== APAXHUB ===================== */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Image Carousel - Left */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <ImageCarousel images={apaxhubImages} alt="Apaxhub service" />
+            </motion.div>
 
-//           <ImageCarousel
-//             images={['/apaxhub/1.jpg', '/apaxhub/2.jpg', '/apaxhub/3.jpg', '/apaxhub/4.jpg']}
-//             altPrefix="Apaxhub"
-//           />
+            {/* Content - Right */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="space-y-5 font-['Noto Sans Gujarati',sans-serif]"
+            >
+              <h1 className="text-2xl md:text-3xl text-appText font-semibold leading-snug">
+                Apaxhub – ટેકનોલોજી જે બિઝનેસને આગળ વધારે
+              </h1>
 
-//           <div className="space-y-3 text-appText text-sm leading-relaxed">
-//             <p>
-//               Apaxhub એક પ્રોફેશનલ સોફ્ટવેર અને વેબ ડેવલપમેન્ટ એજન્સી છે, જે સ્ટાર્ટઅપ્સ અને
-//               મેન્યુફેક્ચરિંગ યુનિટ્સ માટે ક્રિએટિવ અને ફંક્શનલ ડિજિટલ સોલ્યુશન્સ બનાવે છે.
-//             </p>
+              <p className="text-base md:text-lg leading-relaxed text-appText ">
+                Apaxhub એ એક સંપૂર્ણ ડિજિટલ માર્કેટિંગ અને સોફ્ટવેર ડેવલોપમેન્ટ, જે બિઝનેસને ઓનલાઈન
+                હાજરી, તેને વિકસિત, વિશ્વસનીય અને સ્કેલેબલ બનાવે છે.
+              </p>
 
-//             <p>
-//               અમે ફક્ત વેબસાઈટ નથી બનાવતા, અમે તમારા બિઝનેસ માટે સ્કેલેબલ સિસ્ટમ્સ ડિઝાઇન કરીએ છીએ
-//               જે લાંબા ગાળે ફાયદો આપે.
-//             </p>
+              <p className="text-base md:text-lg leading-relaxed text-appText">
+                અમે પ્રીમિયમ વેબસાઇટ ડેવલપમેન્ટ <br />
+                કસ્ટમ સોફ્ટવેર સોલ્યુશન્સ - મોબાઇલ એપ્લિકેશન્સ, સાથે <br />
+                સોશિયલ મીડિયા મેનેજમેન્ટ <br />
+                ડિજિટલ માર્કેટિંગ અને બ્રાન્ડિંગ સેવાઓ દ્વારા બિઝનેસને યોગ્ય <br />
+                ગ્રાહકો સુધી અસરકારક રીતે પહોંચાડીએ છીએ.
+              </p>
 
-//             <ul className="list-disc pl-5 space-y-1">
-//               <li>🌐 પ્રીમિયમ વેબસાઇટ ડેવલપમેન્ટ</li>
-//               <li>⚙️ કસ્ટમ સોફ્ટવેર (ERP, CRM, મેનેજમેન્ટ સિસ્ટમ્સ)</li>
-//               <li>📱 PWA અને મોબાઈલ ફ્રેન્ડલી એપ્સ</li>
-//               <li>🎨 બ્રાન્ડિંગ, UI/UX અને ડિઝાઇન</li>
-//               <li>📢 સોશિયલ મીડિયા મેનેજમેન્ટ</li>
-//             </ul>
+              <p className="text-base md:text-lg leading-relaxed text-appText">
+                Apaxhub માં અમે બિઝનેસની જરૂરિયાતોને સમજી, ટેકનોલોજી અને માર્કેટિંગને એકસાથે ઉપયોગ
+                કરીને તમારા બ્રાન્ડની વિશ્વસનીયતા, ઓનલાઈન પહોંચ અને લાંબા ગાળાની કિંમત સતત વધારીએ
+                છીએ.
+              </p>
 
-//             <p className="font-medium">
-//               Apaxhub નો ઉદ્દેશ એક જ છે – તમારા બિઝનેસને ટેકનોલોજી દ્વારા આગળ વધારવો.
-//             </p>
-//           </div>
-//         </section>
+              <p className="text-base md:text-lg font-medium text-appText">
+                👉 જ્યાં ટેકનોલોજી અને માર્કેટિંગ યોગ્ય દિશામાં મળે, ત્યાં બિઝનેસ વધે છે.
+              </p>
 
-//         {/* ================= SHIV BATTERY ZONE ================= */}
-//         <section className="space-y-4">
-//           <h2 className="text-lg font-semibold text-appText">શિવ બેટરી ઝોન</h2>
+              <p className="text-base md:text-lg font-medium text-appText hover:text-success transition flex items-center gap-2">
+                <Link
+                  href="tel:+918401442160"
+                  suppressHydrationWarning
+                  aria-label="Call Apaxhub"
+                  className="text-appMuted hover:text-appPrimary transition"
+                >
+                  <PhoneCall className="w-8 h-8" />
+                </Link>
+                <Link
+                  href="https://wa.me/918401442160?text=Hi%20Apaxhub,%20I%20need%20a%20custom%20app%20for%20my%20business."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp Apaxhub"
+                  className=""
+                >
+                  <Image
+                    src={'/whatsapp_logo.png'}
+                    alt="W"
+                    height={200}
+                    width={200}
+                    className="w-10 h-10"
+                  />
+                </Link>
+                8401442160
+              </p>
 
-//           {/* Carousel */}
-//           <ImageCarousel
-//             images={[
-//               '/shiv_battery_zone/image_1.jpg',
-//               '/shiv_battery_zone/image_2.jpg',
-//               '/shiv_battery_zone/image_3.jpeg',
-//               '/shiv_battery_zone/image_4.jpeg',
-//             ]}
-//             altPrefix="Shiv Battery Zone"
-//           />
+              {/* CTA */}
+              <div className="pt-2">
+                <motion.a
+                  href="https://apaxhub.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="
+                    inline-flex items-center gap-2
+                    px-6 py-3 rounded-lg
+                    bg-appPrimary text-white
+                    font-medium text-sm
+                    hover:bg-appPrimaryHover
+                    transition
+                  "
+                >
+                  Apaxhub આગળ જુઓ
+                </motion.a>
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
 
-//           {/* Content */}
-//           <div className="bg-appSurface border border-appBorder rounded-xl p-5 space-y-3">
-//             <p className="text-appText text-sm font-medium">
-//               મોરબીનું સૌથી વિશ્વાસપાત્ર ઓનલાઇન બેટરી માર્કેટપ્લેસ 🔋
-//             </p>
+        {/* ===================== SHIV BATTERY ZONE ===================== */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6 }}
+          className="font-['Noto Sans Gujarati',sans-serif]"
+        >
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-2xl md:text-3xl font-semibold text-appText mb-12"
+          ></motion.h2>
 
-//             <p className="text-appMuted text-sm leading-relaxed">
-//               શું તમે બેટરીની સમસ્યાથી પરેશાન છો? હવે ચિંતા છોડો! ૨૦૨૧થી કાર્યરત શિવ બેટરી ઝોન
-//               લાવ્યું છે ઘરબેઠા બેટરી સોલ્યુશન.
-//             </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Image Carousel - Left */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <ImageCarousel images={shivBatteryImages} alt="Shiv Battery Zone" />
+            </motion.div>
 
-//             <ul className="text-sm text-appMuted space-y-1 list-disc list-inside">
-//               <li>🚗 કાર, બાઇક, ટ્રેક્ટર અને ટ્રક માટે બેટરી</li>
-//               <li>🏠 ઘર અને ઓફિસ માટે ઇન્વર્ટર બેટરી</li>
-//               <li>🛡️ ઓરિજિનલ કંપની વોરંટી</li>
-//               <li>📄 ગાડી અને બાઇક ઇન્શ્યોરન્સ સર્વિસ</li>
-//               <li>🚚 મોરબીમાં ઝડપી ડિલિવરી</li>
-//             </ul>
+            {/* Content - Right */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="space-y-4"
+            >
+              <h1 className="text-2xl md:text-3xl text-appText font-semibold leading-snug">
+                શિવ બેટરી ઝોન
+              </h1>
+              <p className="text-lg font-medium text-appText">
+                મોરબીનું સૌથી વિશ્વાસપાત્ર ઓનલાઇન બેટરી માર્કેટપ્લેસ 🔋
+              </p>
 
-//             <p className="text-sm text-appText font-medium">📞 સંપર્ક: 94272 50412 | 97232 50412</p>
+              <p className="text-appMuted leading-relaxed">
+                શું તમે બેટરીની સમસ્યાથી પરેશાન છો? હવે ચિંતા છોડો! ૨૦૨૧થી કાર્યરત શિવ બેટરી ઝોન
+                લાવ્યું છે ઘરબેઠા બેટરી સોલ્યુશન. Amaron અને Exide જેવી ટોચની બ્રાન્ડ્સ હવે માત્ર એક
+                કોલ પર!
+              </p>
 
-//             <p className="text-xs text-appMuted">
-//               📍 શોપ નં. 19–20, પ્રમુખ પ્લાઝા, અશ્વમેઘ હોટલ સામે, 8A નેશનલ હાઈવે, ટીંબડી પાટિયા,
-//               મોરબી – 363642
-//             </p>
+              <ul className="space-y-1 text-appMuted">
+                <li>🚗 તમામ વાહનો માટે બેટરી: કાર, બાઇક, ટ્રેક્ટર અને ટ્રક.</li>
+                <li>🏠 ઇન્વર્ટર બેટરી: ઘર કે ઓફિસ માટે પાવરફુલ બેકઅપ.</li>
+                <li>🛡️ ફુલ વોરંટી: દરેક પ્રોડક્ટ પર કંપનીની ઓરિજિનલ વોરંટી.</li>
+                <li>📄 ઇન્શ્યોરન્સ સર્વિસ: ગાડી અને બાઇક ઇન્શ્યોરન્સ પણ અહીં જ.</li>
+                <li>🚚 ફાસ્ટ ડિલિવરી: સમગ્ર મોરબીમાં સર્વિસ.</li>
+              </ul>
 
-//             <Link
-//               href="https://share.google/2JPngVz5HFA8lbE1i"
-//               target="_blank"
-//               className="inline-block text-sm text-appPrimary underline"
-//             >
-//               Google પર જુઓ
-//             </Link>
-//           </div>
-//         </section>
-//       </div>
-//     </main>
-//   );
-// }
+              <p className="font-medium text-appText">ખરીદો વિશ્વાસ, ખરીદો ગુણવત્તા!</p>
 
-import React from 'react';
+              <p className="font-medium text-appText flex items-center gap-2">
+                <Link
+                  href="tel:+919427250412"
+                  suppressHydrationWarning
+                  aria-label="Call Apaxhub"
+                  className="text-appMuted hover:text-appPrimary transition"
+                >
+                  <PhoneCall className="w-8 h-8" />
+                </Link>
+                <Link
+                  href="https://wa.me/919427250412"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp Apaxhub"
+                  className="text-appText hover:text-success transition flex items-center gap-2"
+                >
+                  <Image
+                    src={'/whatsapp_logo.png'}
+                    alt="W"
+                    height={200}
+                    width={200}
+                    className="w-10 h-10"
+                  />
+                </Link>{' '}
+                સંપર્ક: 94272 50412 | 97232 50412
+              </p>
 
-export default function Page() {
-  return <div>page under construction</div>;
+              <p className="text-sm text-appMuted">
+                📍 શોપ નંબર 19 -20, પ્રમુખ પ્લાઝા, અશ્વમેઘ હોટલની સામે, 8 A નેશનલ હાઈવે, ટીંબડી
+                પાટિયા, મોરબી – 363642
+              </p>
+
+              {/* CTA */}
+              <div className="pt-2">
+                <motion.a
+                  href="https://share.google/2JPngVz5HFA8lbE1i"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="
+                    inline-flex items-center gap-2
+                    px-6 py-3 rounded-lg
+                    bg-red-600 text-white
+                    font-medium text-sm
+                    hover:opacity-90
+                    transition
+                  "
+                >
+                  Shiv Battery Zone જુઓ
+                </motion.a>
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+      </div>
+    </main>
+  );
 }

@@ -43,14 +43,19 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Vrundavan Park" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${gujarati.className} antialiased bg-appBg text-appText h-screen w-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${gujarati.className}
+        antialiased bg-appBg text-appText min-h-screen flex flex-col`}
       >
         <Navbar />
 
-        <Providers>{children}</Providers>
+        {/* MAIN CONTENT */}
+        <main className="flex-1 w-full">
+          <Providers>{children}</Providers>
+        </main>
+
         <Footer />
       </body>
     </html>

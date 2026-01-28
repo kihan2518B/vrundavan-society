@@ -7,25 +7,20 @@ import { Globe, PhoneCall } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="w-full border-t border-appBorder bg-appSurface">
-      <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col gap-4">
+      <div className="max-w-5xl mx-auto px-4 py-5 flex flex-col gap-4">
         {/* IMPORTANT NOTE */}
-        <div className="flex items-center justify-center gap-2 text-sm text-appText font-medium">
+        <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-appText">
           <span>*ખાસ નોંધ*</span>
-          <span className="text-appMuted">વૃંદાવન પાર્કના વોટ્સએપ ગૃપમા જોડાવાની લિંક</span>
+          <span className="text-appMuted text-center">
+            વૃંદાવન પાર્કના વોટ્સએપ ગૃપમા જોડાવાની લિંક
+          </span>
           <Link
             href="https://chat.whatsapp.com/DmcmYC6MIEB9AgSzc4ii84"
             target="_blank"
-            rel="noopener noreferrer"
+            className="hover:scale-105 transition"
             aria-label="Join WhatsApp Group"
-            className="text-success hover:scale-110 transition"
           >
-            <Image
-              src="/whatsapp_logo.png"
-              width={200}
-              height={200}
-              alt="WhatsApp"
-              className="w-8 h-8"
-            />
+            <Image src="/whatsapp_logo.png" alt="WhatsApp" width={24} height={24} />
           </Link>
         </div>
 
@@ -113,15 +108,31 @@ export default function Footer() {
                   બાઈક & કારના વીમા કરી આપવામા આવશે
                 </p>
 
-                <div className="flex items-center gap-2 mt-2 text-sm text-appText">
+                <div className="flex items-center gap-2 mt-2 text-appMuted">
                   <Link
                     href="tel:+919427250412"
                     suppressHydrationWarning
-                    className="hover:underline flex items-center gap-2"
+                    aria-label="Call Apaxhub"
+                    className="text-appMuted hover:text-appPrimary transition"
                   >
                     <PhoneCall className="w-8 h-8" />
-                    9427250412
                   </Link>
+                  <Link
+                    href="https://wa.me/919427250412"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp Apaxhub"
+                    className="text-appText hover:text-success transition flex items-center gap-2"
+                  >
+                    <Image
+                      src={'/whatsapp_logo.png'}
+                      alt="W"
+                      height={200}
+                      width={200}
+                      className="w-10 h-10"
+                    />
+                  </Link>
+                  9427250412
                 </div>
               </div>
             </div>

@@ -4,6 +4,7 @@ import Providers from '@/lib/queryprovider';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { Noto_Sans_Gujarati } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -55,7 +56,7 @@ export default function RootLayout({
         <main className="flex-1 w-full">
           <Providers>{children}</Providers>
         </main>
-
+        <Toaster />
         <Footer />
       </body>
     </html>

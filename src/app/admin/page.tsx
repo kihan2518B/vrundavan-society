@@ -295,6 +295,7 @@ export default function AdminPage() {
           />
         )}
       </section>
+      {view === 'vehicle' && hasNextPage && <div ref={loadMoreRef} className="h-8 w-full" />}
 
       {/* FORMS */}
       <VehicleFormSheet

@@ -56,7 +56,7 @@ export default function ReportPage() {
 
   const { data: apartments } = useApartments();
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['vehicles', filters],
     queryFn: ({ pageParam }) => fetchVehicles({ pageParam, filters }),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -167,6 +167,8 @@ export default function ReportPage() {
           )}
         </>
       </section>
+      {hasNextPage && <div ref={loadMoreRef} className="h-8 w-full" />}
+      {isFetchingNextPage && <p className="text-center text-sm text-appMuted">Loading more…</p>}
     </main>
   );
 }

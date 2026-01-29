@@ -33,7 +33,9 @@ const ImageCarousel = ({ images, alt }: { images: string[]; alt: string }) => {
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
-          <img
+          <Image
+            width={500}
+            height={500}
             src={images[currentIndex]}
             alt={`${alt} ${currentIndex + 1}`}
             className="w-full h-full object-cover rounded-2xl"
@@ -272,7 +274,7 @@ export default function AboutPage() {
                   <PhoneCall className="w-8 h-8" />
                 </Link>
                 <Link
-                  href="https://wa.me/919427250412"
+                  href="https://wa.me/919723250412"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp Apaxhub"

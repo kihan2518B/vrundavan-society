@@ -118,7 +118,7 @@ export default function Footer() {
                     <PhoneCall className="w-8 h-8" />
                   </Link>
                   <Link
-                    href="https://wa.me/919427250412"
+                    href="https://wa.me/919723250412"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="WhatsApp Apaxhub"

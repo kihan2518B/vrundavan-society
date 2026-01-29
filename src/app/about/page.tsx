@@ -132,8 +132,8 @@ export default function AboutPage() {
               </h1>
 
               <p className="text-base md:text-lg leading-relaxed text-appText ">
-                Apaxhub એ એક સંપૂર્ણ ડિજિટલ માર્કેટિંગ અને સોફ્ટવેર ડેવલોપમેન્ટ, જે બિઝનેસને ઓનલાઈન
-                હાજરી, તેને વિકસિત, વિશ્વસનીય અને સ્કેલેબલ બનાવે છે.
+                Apaxhub એ એક સંપૂર્ણ ડિજિટલ માર્કેટિંગ અને સોફ્ટવેર ડેવલોપમેન્ટ એજંસી છે, જે
+                બિઝનેસને ઓનલાઈન હાજરી, તેને વિકસિત, વિશ્વસનીય અને સ્કેલેબલ બનાવે છે.
               </p>
 
               <p className="text-base md:text-lg leading-relaxed text-appText">

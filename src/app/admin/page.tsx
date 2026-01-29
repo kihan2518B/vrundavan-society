@@ -121,7 +121,7 @@ export default function AdminPage() {
       <header className="sticky top-0 z-20 bg-appSurface border-b border-appBorder">
         <div className="max-w-5xl mx-auto px-4 py-3 space-y-3">
           {/* Top Row */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Link href="/" className="w-9 h-9 rounded-lg bg-appBg flex items-center justify-center">
               ←
             </Link>

@@ -68,13 +68,14 @@ export default function ApartmentTable({
   }, [hasNextPage, fetchNextPage]);
 
   const apartments: Apartment[] = data?.pages.flatMap((p) => p.data) ?? [];
-
+  console.log('apartments:', apartments);
   return (
     <>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-appSurface border border-appBorder rounded-lg overflow-hidden">
           <thead className="bg-appBg text-xs text-appMuted">
             <tr>
+              <th className="px-4 py-3 text-left">Sr. No.</th>
               <th className="px-4 py-3 text-left">Apartment Name</th>
               <th className="px-4 py-3 text-left hidden sm:table-cell">Bahadur Name</th>
               <th className="px-4 py-3 text-left hidden sm:table-cell">Bahadur Mo.</th>

@@ -9,7 +9,6 @@ import {
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
 import { apartment } from './apartment';
-import { admin } from './admin';
 
 export const vehicle = pgTable(
   'vehicle',
@@ -27,14 +26,6 @@ export const vehicle = pgTable(
 
     name: varchar('name', { length: 100 }).notNull(),
     mobile: varchar('mobile', { length: 15 }).notNull(),
-
-    createdBy: varchar('created_by', { length: 50 })
-      .references(() => admin.username)
-      .notNull(),
-
-    updatedBy: varchar('updated_by', { length: 50 })
-      .references(() => admin.username)
-      .notNull(),
 
     isDeleted: boolean('is_deleted').default(false).notNull(),
 
@@ -57,10 +48,6 @@ export const vehicle = pgTable(
 
     // 🏢 Location-based reports
     blockFloorIdx: index('vehicle_block_floor_idx').on(table.blockNumber, table.floor),
-
-    // 🧑‍💼 Audit & reporting
-    createdByIdx: index('vehicle_created_by_idx').on(table.createdBy),
-    updatedByIdx: index('vehicle_updated_by_idx').on(table.updatedBy),
 
     // 🗑 Soft delete filtering
     notDeletedIdx: index('vehicle_not_deleted_idx').on(table.isDeleted),

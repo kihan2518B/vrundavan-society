@@ -1,12 +1,23 @@
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+// import { drizzle } from 'drizzle-orm/neon-http';
+// import { neon } from '@neondatabase/serverless';
+// import * as schema from './db/schema';
+
+// const sql = neon(process.env.DATABASE_URL!);
+
+// export const db = drizzle(sql, {
+//   schema,
+// });
+
+// docker/vps connection pooling
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 import * as schema from './db/schema';
 
-const sql = neon(process.env.DATABASE_URL!);
-
-export const db = drizzle(sql, {
-  schema,
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
 });
+
+export const db = drizzle(pool, { schema });
 
 // this can e run by npx tsx index.ts
 // async function main() {

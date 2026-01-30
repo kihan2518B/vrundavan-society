@@ -49,18 +49,19 @@
 # #   db-password:
 # #     file: db/password.txt
 
-
-
-
 services:
   app:
-    build: 
+    build:
       context: .
     image: nextjs-dev
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
-      - NODE_ENV=development
+      NODE_ENV: development
+      DATABASE_URL: postgres://app_user:strong_password@host.docker.internal:5432/vahan_pehchano
+      ADMIN_EMAIL: vrundavan@gmail.com
+      ADMIN_PASSWORD: vrundavan
+      ADMIN_JWT_SECRET: long-random-secret
     develop:
       watch:
         - action: sync
@@ -70,3 +71,6 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
+
+volumes:
+  pgdata:

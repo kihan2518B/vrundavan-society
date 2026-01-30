@@ -12,6 +12,15 @@ export async function POST(req: Request) {
   if (!vehicleNumber || !ownerName || !contactNumber || !blockNumber || !floor) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
+  console.log(
+    'vehicleNumber, ownerName, contactNumber, blockNumber, floor, apartmentId:',
+    vehicleNumber,
+    ownerName,
+    contactNumber,
+    blockNumber,
+    floor,
+    apartmentId
+  );
 
   const vn = normalizeVehicleNumber(vehicleNumber);
 
@@ -23,8 +32,6 @@ export async function POST(req: Request) {
       blockNumber: blockNumber,
       floor: floor,
       apartmentId: apartmentId,
-      createdBy: 'admin',
-      updatedBy: 'admin',
     });
 
     return NextResponse.json({ success: true, message: 'Vehicle added' }, { status: 201 });

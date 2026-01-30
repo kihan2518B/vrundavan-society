@@ -14,6 +14,7 @@ type VehicleFormProps = {
     blockNumber: string;
     floor: string;
     contactNumber: string;
+    apartmentId: string;
   };
   onSuccess?: () => void;
   onCancel?: () => void;
@@ -26,12 +27,11 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
   const [blockNumber, setBlockNumber] = useState(isEdit ? initialData!.blockNumber : '');
   const [floor, setFloor] = useState(isEdit ? String(initialData!.floor) : '');
   const [contactNumber, setContactNumber] = useState(isEdit ? initialData!.contactNumber : '');
-  const [apartmentId, setApartmentId] = useState('1');
+  const [apartmentId, setApartmentId] = useState(isEdit ? initialData!.apartmentId : '1');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const { data: apartments, isLoading: isApartmentLoading } = useApartments();
-
   async function handleSubmit() {
     // Validation
     if (!vehicleNumber.trim()) {
@@ -446,6 +446,7 @@ type Vehicle = {
   blockNumber: string;
   floor: string;
   contactNumber: string;
+  apartmentId: string;
 };
 
 export default function VehicleFormSheet({

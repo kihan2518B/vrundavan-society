@@ -23,6 +23,7 @@ type Vehicle = {
   blockNumber: string;
   floor: string;
   contactNumber: string;
+  apartmentId: string;
 };
 type Apartment = {
   id: string;

@@ -33,8 +33,21 @@ export default function Footer() {
             </div>
 
             <div className="flex-1">
-              <p className="text-sm font-semibold text-appText flex items-center gap-1">
-                Built with ❤️ by Apaxhub
+              <p className="text-sm font-semibold text-appText flex gap-2 items-center justify-center">
+                {' '}
+                Built With{' '}
+                <Image
+                  width={100}
+                  height={100}
+                  className="h-5 w-5"
+                  alt="Love"
+                  src={'/Green Heart.png'}
+                />{' '}
+                By{' '}
+                <Link href={'https://apaxhub.vercel.app'} className="text-appText">
+                  {' '}
+                  Apaxhub
+                </Link>
               </p>
               <p className="text-sm text-appMuted mt-0.5 font-[\'Noto Sans Gujarati\',sans-serif]">
                 પ્રીમિયમ વેબસાઇટ્સ • કસ્ટમ સોફ્ટવેર • બિઝનેસ ઓટોમેશન

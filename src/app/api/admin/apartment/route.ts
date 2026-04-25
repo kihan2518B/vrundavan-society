@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { apartment } from '@/db/schema/apartment';
 import { db } from '@/index';
-import { eq, and, desc, lt } from 'drizzle-orm';
+import { eq, and, desc, lt, asc } from 'drizzle-orm';
 
 export async function POST(req: Request) {
   const { apartmentName, pramukhName, pramukhMobile, bahadurName, bahadurMobile } =
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
         })
         .from(apartment)
         .where(and(eq(apartment.isDeleted, false)))
-        .orderBy(desc(apartment.createdAt));
+        .orderBy(asc(apartment.apartmentName));
 
       return NextResponse.json(
         {
@@ -73,7 +73,7 @@ export async function GET(req: Request) {
 
       const hasMore = rows.length > limit;
       const data = hasMore ? rows.slice(0, limit) : rows;
-      
+
       return NextResponse.json({
         data,
         nextCursor: hasMore ? data[data.length - 1].createdAt : null,

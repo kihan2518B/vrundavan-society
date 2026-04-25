@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { vehicle } from '@/db/schema/vehicle';
 import { normalizeVehicleNumber } from '@/lib/normalize';
 import { db } from '@/index';
-import { eq, and, lt, desc, ilike } from 'drizzle-orm';
+import { eq, and, lt, ilike, asc } from 'drizzle-orm';
 import { apartment } from '@/db/schema';
 
 export async function POST(req: Request) {
@@ -83,7 +83,7 @@ export async function GET(req: Request) {
         cursor ? lt(vehicle.createdAt, new Date(cursor)) : undefined
       )
     )
-    .orderBy(desc(vehicle.createdAt))
+    .orderBy(asc(vehicle.vehicleNumber))
     .limit(limit + 1);
 
   const hasMore = rows.length > limit;

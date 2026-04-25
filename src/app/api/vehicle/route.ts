@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { and, eq, ilike } from 'drizzle-orm';
+import { and, asc, eq, ilike } from 'drizzle-orm';
 import { db } from '@/index';
 import { vehicle } from '@/db/schema/vehicle';
 import { normalizeVehicleNumber } from '@/lib/normalize';
@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       })
       .from(vehicle)
       .where(and(ilike(vehicle.vehicleNumber, `%${query}%`), eq(vehicle.isDeleted, false)))
+      .orderBy(asc(vehicle.vehicleNumber))
       .limit(10);
 
     return NextResponse.json({ suggestions: result.map((r) => r.vehicleNumber) }, { status: 200 });

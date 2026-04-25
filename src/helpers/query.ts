@@ -62,7 +62,7 @@ export async function getVehicles({
     search?: string | null;
   };
   sort: {
-    by: 'vehicle_number';
+    by: 'vehicle_number' | 'hierarchy';
     order: 'asc' | 'desc';
   };
   limit?: number;
@@ -83,6 +83,15 @@ export async function getVehicles({
 
   if (filters.search) conditions.push(ilike(vehicle.vehicleNumber, `%${filters.search}%`));
 
+  const orderClauses =
+    sort.by === 'hierarchy'
+      ? sort.order === 'asc'
+        ? [asc(apartment.apartmentName), asc(vehicle.floor), asc(vehicle.blockNumber)]
+        : [desc(apartment.apartmentName), desc(vehicle.floor), desc(vehicle.blockNumber)]
+      : sort.order === 'asc'
+        ? [asc(vehicle.vehicleNumber)]
+        : [desc(vehicle.vehicleNumber)];
+
   const query = db
     .select({
       id: vehicle.id,
@@ -97,7 +106,7 @@ export async function getVehicles({
     .from(vehicle)
     .leftJoin(apartment, eq(vehicle.apartmentId, apartment.id))
     .where(and(...conditions))
-    .orderBy(sort.order === 'asc' ? asc(vehicle.vehicleNumber) : desc(vehicle.vehicleNumber))
+    .orderBy(...orderClauses)
     .limit(limit ?? 10000);
 
   return query;

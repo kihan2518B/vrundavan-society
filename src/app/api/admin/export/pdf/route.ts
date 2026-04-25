@@ -16,7 +16,7 @@ export async function GET(req: Request) {
 
   const vehicles = await getVehicles({
     filters,
-    sort: { by: 'vehicle_number', order: 'asc' },
+    sort: { by: 'hierarchy', order: 'asc' },
   });
 
   const rows = vehicles.map((v) => ({

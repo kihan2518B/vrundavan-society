@@ -27,7 +27,7 @@ function VehicleForm({ mode, initialData, onSuccess, onCancel }: VehicleFormProp
   const [blockNumber, setBlockNumber] = useState(isEdit ? initialData!.blockNumber : '');
   const [floor, setFloor] = useState(isEdit ? String(initialData!.floor) : '');
   const [contactNumber, setContactNumber] = useState(isEdit ? initialData!.contactNumber : '');
-  const [apartmentId, setApartmentId] = useState(isEdit ? initialData!.apartmentId : '1');
+  const [apartmentId, setApartmentId] = useState(isEdit ? initialData!.apartmentId : '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);

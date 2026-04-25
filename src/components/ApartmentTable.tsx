@@ -68,7 +68,6 @@ export default function ApartmentTable({
   }, [hasNextPage, fetchNextPage]);
 
   const apartments: Apartment[] = data?.pages.flatMap((p) => p.data) ?? [];
-  console.log('apartments:', apartments);
   return (
     <>
       <div className="overflow-x-auto">

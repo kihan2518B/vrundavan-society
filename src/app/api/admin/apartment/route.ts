@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { apartment } from '@/db/schema/apartment';
 import { db } from '@/index';
-import { eq, and, desc, lt, asc } from 'drizzle-orm';
+import { eq, and, lt, asc } from 'drizzle-orm';
 
 export async function POST(req: Request) {
   const { apartmentName, pramukhName, pramukhMobile, bahadurName, bahadurMobile } =
@@ -68,7 +68,7 @@ export async function GET(req: Request) {
             cursor ? lt(apartment.createdAt, new Date(cursor)) : undefined
           )
         )
-        .orderBy(desc(apartment.createdAt))
+        .orderBy(asc(apartment.apartmentName))
         .limit(limit + 1);
 
       const hasMore = rows.length > limit;
